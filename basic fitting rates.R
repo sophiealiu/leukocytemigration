@@ -49,7 +49,7 @@ for (i in seq_along(tissues)) {
 # monte-carlo for singular tissue
 set.seed(42)                          # the answer to life, the universe, and everything
 k_hat <- coef(model)["k"]
-k_se <- summary(fit)$parameters["k", "Std. Error"]
+k_se <- summary(model)$parameters["k", "Std. Error"]
 
 df_sub <- df_long %>%
   subset(sample_type == "peyer")
@@ -70,14 +70,14 @@ pred_mat <- outer(
   function(k, t) exp(-k * t)
 )
 
-fit <- exp(-k_hat * times)
+model2 <- exp(-k_hat * times)
 
 lower <- apply(pred_mat, 2, quantile, 0.025)  # top percentile isolated helps
 upper <- apply(pred_mat, 2, quantile, 0.975)
 
 mc_df <- data.frame(
   time = times,
-  fit = fit,
+  fit = model2,
   lower = lower,
   upper = upper
 )
@@ -90,7 +90,7 @@ ggplot() +
   ) +
   geom_line(
     data = mc_df,
-    aes(time, fit),
+    aes(time, model2),
     linewidth = 1.2
   ) +
   geom_point(
