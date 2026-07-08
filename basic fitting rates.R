@@ -1,6 +1,6 @@
 # -----------------------------------------------------------------------------
 # Author: Sophie A. Liu
-# Date : 07/08/2026 4:34pm
+# Date : 07/08/2026 3:47pm
 # Purpose: Estimating forward and reverse rates
 # -----------------------------------------------------------------------------
 
@@ -14,7 +14,7 @@ library(tidyverse)
 
 
 leukdatadir <- "I:/Hu Lab/Sophie/2. Leukocyte migration/data"
-dfmig <- read_excel(file.path(leukdatadir, "estimations_0706.xlsx"), sheet = "summary")
+dfmig <- read_excel(file.path(leukdatadir, "estim_0708.xlsx"), sheet = "summary")
 
 
 # -----------------------------------------------------------------------------
@@ -40,14 +40,14 @@ for (i in seq_along(tissues)) {
   model <- nls(
     percent ~ exp(-k * time),
     data = df_long,
-    start = list(k = 0.001))        # required to have initial guess. starting small based on inspection
+    start = list(k = 0.001))          # required to have initial guess. starting small based on inspection
   k_revs[[i]] <- coef(model)["k"]
 }
 
 
 # -----------------------------------------------------------------------------
 # monte-carlo for singular tissue
-set.seed(42)                     # the answer to life, the universe, and everything
+set.seed(42)                          # the answer to life, the universe, and everything
 k_hat <- coef(fit)["k"]
 k_se <- summary(fit)$parameters["k", "Std. Error"]
 
@@ -121,6 +121,7 @@ k_fors <- vector("list", length(tissues))
 names(k_fors) <- tissues
 
 for (i in seq_along(tissues)) {
+  tissue <- tissues[i]
   calc <- k_revs[[i]] * dfmig2$ratio[i]
   k_fors[[i]] <- calc
 }
