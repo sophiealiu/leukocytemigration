@@ -144,3 +144,31 @@ for (i in seq_along(tissues)) {
   calc <- k_revs[[i]] * ratio
   k_fors[[i]] <- calc
 }
+
+
+# -----------------------------------------------------------------------------
+# visualization
+order <- c(
+  "bone_marrow", 
+  "peyer", 
+  "axillary_LN", 
+  "iliac_LN", 
+  "ing_LN", 
+  "mes_LN", 
+  "spleen_white", 
+  "spleen_red"
+)
+
+df_plot <- data.frame(
+  tissue = names(k_fors),
+  k_value = unlist(k_fors),
+  row.names = NULL
+)
+
+df_plot$tissue <- factor(df_plot$tissue, levels = order)
+
+ggplot(df_plot, aes(x = k_value, y = tissue)) +
+  geom_col() +
+  labs(title = "rate constants of entry for different tissues",
+       x = "forward rate",
+       y = "tissue")
