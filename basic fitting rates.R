@@ -1,6 +1,6 @@
 # -----------------------------------------------------------------------------
 # Author: Sophie A. Liu
-# Date : 07/08/2026 3:47pm
+# Date : 07/08/2026 4:34pm
 # Purpose: Estimating forward and reverse rates
 # -----------------------------------------------------------------------------
 
@@ -35,11 +35,11 @@ tissues <- tissues[tissues != "blood"]
 k_revs <- vector("list", length(tissues))
 names(k_revs) <- tissues
 
-for (i in seq_along(sample_type)) {
+for (i in seq_along(tissues)) {
   tissue <- tissues[i]
   model <- nls(
     percent ~ exp(-k * time),
-    data = filter(df_long, sample_type == "peyer"),     # repeated for each type
+    data = df_long,
     start = list(k = 0.001))        # required to have initial guess. starting small based on inspection
   k_revs[[i]] <- coef(model)["k"]
 }
@@ -117,10 +117,10 @@ dfmig2 <- dfmig %>%
   ) %>%
   ungroup()
 
-kfors <- list()
+k_fors <- vector("list", length(tissues))
+names(k_fors) <- tissues
 
-for (i in seq_along(sample_type)) {
-  calc <- k_revs[[i]] * ratio[i]
-  kfors <- append(kfors, calc)
+for (i in seq_along(tissues)) {
+  calc <- k_revs[[i]] * dfmig2$ratio[i]
+  k_fors[[i]] <- calc
 }
-
