@@ -48,7 +48,7 @@ for (i in seq_along(tissues)) {
 # -----------------------------------------------------------------------------
 # monte-carlo for singular tissue
 set.seed(42)                          # the answer to life, the universe, and everything
-k_hat <- coef(fit)["k"]
+k_hat <- coef(model)["k"]
 k_se <- summary(fit)$parameters["k", "Std. Error"]
 
 df_sub <- df_long %>%
