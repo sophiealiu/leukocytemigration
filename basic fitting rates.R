@@ -1,6 +1,6 @@
 # -----------------------------------------------------------------------------
 # Author: Sophie A. Liu
-# Date : 07/08/2026 5:44pm CDT
+# Date : 07/08/2026 3:47pm CDT
 # Purpose: Estimating forward and reverse rates
 # -----------------------------------------------------------------------------
 
@@ -49,57 +49,69 @@ for (i in seq_along(tissues)) {
 # -----------------------------------------------------------------------------
 # monte-carlo for singular tissue
 set.seed(42)                          # the answer to life, the universe, and everything
-k_hat <- coef(model)["k"]
-k_se <- summary(model)$parameters["k", "Std. Error"]
+plots <- vector("list", length(tissues))
+names(plots) <- tissues
 
-df_sub <- df_long %>%
-  subset(sample_type == "peyer")
-
-nsim <- 1000
-
-k_sim <- rnorm(
-  nsim,
-  mean = k_hat,
-  sd = k_se
-)
-
-times <- seq(0, max(df_sub$time), length.out = 200)
-
-pred_mat <- outer(
-  k_sim,
-  times,
-  function(k, t) exp(-k * t)
-)
-
-model2 <- exp(-k_hat * times)
-
-lower <- apply(pred_mat, 2, quantile, 0.025)  # top percentile isolated helps
-upper <- apply(pred_mat, 2, quantile, 0.975)
-
-montC_df <- data.frame(
-  time = times,
-  fit = model2,
-  lower = lower,
-  upper = upper
-)
-
-ggplot() +
-  geom_ribbon(
-    data = montC_df,
-    aes(time, ymin = lower, ymax = upper),
-    alpha = 0.2
-  ) +
-  geom_line(
-    data = montC_df,
-    aes(time, model2),
-    linewidth = 1.2
-  ) +
-  geom_point(
+for (i in seq_along(tissues)) {
+  
+  tissue <- tissues[i]
+  
+  df_sub <- df_long %>%
+    filter(sample_type == tissue)
+  
+  model <- nls(
+    percent ~ exp(-k * time),
     data = df_sub,
-    aes(time, percent),
-    alpha = 0.7
-  ) +
-  labs(title = "peyer")
+    start = list(k = 0.001)
+  )
+  
+  k_hat <- coef(model)["k"]
+  k_se  <- summary(model)$parameters["k", "Std. Error"]
+  
+  k_sim <- rnorm(
+    nsim,
+    mean = k_hat,
+    sd = k_se
+  )
+  
+  times <- seq(0, max(df_sub$time), length.out = 200)
+  
+  pred_mat <- outer(
+    k_sim,
+    times,
+    function(k, t) exp(-k * t)
+  )
+  
+  model2 <- exp(-k_hat * times)
+  
+  lower <- apply(pred_mat, 2, quantile, 0.025)
+  upper <- apply(pred_mat, 2, quantile, 0.975)
+  
+  montC_df <- data.frame(
+    time = times,
+    fit = model2,
+    lower = lower,
+    upper = upper
+  )
+  
+  plots[[i]] <- ggplot() +
+    geom_ribbon(
+      data = montC_df,
+      aes(time, ymin = lower, ymax = upper),
+      alpha = 0.2
+    ) +
+    geom_line(
+      data = montC_df,
+      aes(time, fit),
+      linewidth = 1.2
+    ) +
+    geom_point(
+      data = df_sub,
+      aes(time, percent),
+      alpha = 0.7
+    ) +
+    labs(title = tissue)
+}
 
 
 # -----------------------------------------------------------------------------
@@ -123,6 +135,12 @@ names(k_fors) <- tissues
 
 for (i in seq_along(tissues)) {
   tissue <- tissues[i]
-  calc <- k_revs[[i]] * dfmig2$ratio[i]
+  
+  ratio <- dfmig2 %>%
+    filter(sample_type == tissue) %>%
+    summarise(mean_ratio = mean(ratio)) %>%
+    pull(mean_ratio)
+  
+  calc <- k_revs[[i]] * ratio
   k_fors[[i]] <- calc
 }
