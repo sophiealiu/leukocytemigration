@@ -1,6 +1,6 @@
 # -----------------------------------------------------------------------------
 # Author: Sophie A. Liu
-# Date : 07/08/2026 3:47pm
+# Date : 07/08/2026 5:44pm CDT
 # Purpose: Estimating forward and reverse rates
 # -----------------------------------------------------------------------------
 
@@ -39,7 +39,8 @@ for (i in seq_along(tissues)) {
   tissue <- tissues[i]
   model <- nls(
     percent ~ exp(-k * time),
-    data = df_long,
+    data = df_long %>% 
+      filter(sample_type == tissue),
     start = list(k = 0.001))          # required to have initial guess. starting small based on inspection
   k_revs[[i]] <- coef(model)["k"]
 }
@@ -75,7 +76,7 @@ model2 <- exp(-k_hat * times)
 lower <- apply(pred_mat, 2, quantile, 0.025)  # top percentile isolated helps
 upper <- apply(pred_mat, 2, quantile, 0.975)
 
-mc_df <- data.frame(
+montC_df <- data.frame(
   time = times,
   fit = model2,
   lower = lower,
@@ -84,12 +85,12 @@ mc_df <- data.frame(
 
 ggplot() +
   geom_ribbon(
-    data = mc_df,
+    data = montC_df,
     aes(time, ymin = lower, ymax = upper),
     alpha = 0.2
   ) +
   geom_line(
-    data = mc_df,
+    data = montC_df,
     aes(time, model2),
     linewidth = 1.2
   ) +
