@@ -121,8 +121,8 @@ y0 = [1, ...              % blood
     1, 1,1,1, ...
     1];      
 
-% --- they can take the experiment out to 3 days (72 hrs, 4320 sec.)
-tspan = [0, 4000];    % rates etc. in 1/s unit
+% --- they can only take the experiment out to 3 days (72 hrs, 4320 min.)
+tspan = [0, 4000];    % rates etc. in 1/min unit
 
 % --- solving
 [t, y] = ode45(@(t, y)splitComps(t, y, p), tspan, y0);
