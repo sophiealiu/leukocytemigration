@@ -4,12 +4,12 @@
 % Purpose: simple compartment modeling
 % ------------------------------------------------------------------------
 
-% --- assumptions --------------------------------------------------------
+% --- assumptions -------
 % conservation of volume in each compartment
 % homeostasis will be reached
-% once labeled, it cannot be unlabeled (however, label only lasts 5 min and we have 10 min increments...
-% ------------------------------------------------------------------------
-
+% once labeled, it cannot be unlabeled 
+% (however, label only lasts 5 min and we have 10 min increments...
+% ------------------------
 
 function dydt = splitComps(t,y,p)
     b = y(1);
@@ -65,16 +65,16 @@ function dydt = splitComps(t,y,p)
     k4 = p(16); 
 
 
-% --- system -------------------------------------------------------------
+% --- system -------------
 dydt = [ 
-    % --- all exiting the blood -----------------------------
+    % --- all exiting the blood ---
     -(k1+ k2a+k2b+ k3a+k3b+k3c+k3d+ k4)*b + ...
         kneg1*(l1+u1) + ...
         kneg2a*(l2a+u2a) + kneg2b*(l2b+u2b) + ...
         kneg3a*(l3a+u3a) + kneg3b*(l3b+u3b) + kneg3c*(l3c+u3c) + kneg3d*(l3d+u3d) + ...
         kneg4*(l4 + u4); 
    
-    % --- total labeled flux for each tissue compartment ----
+    % --- total labeled flux for each tissue compartment ---
         k1*b - kneg1*l1;
         k2a*b - kneg2a*l2a;
         k2b*b - kneg2b*l2b;
@@ -98,8 +98,8 @@ dydt = [
 
 end
 
-% --- initial guess for params based on R. magnitude not direction -------
-% krevs first then kfors
+% --- initial guess for params based on R. magnitude not direction 
+% krevs first then kfors ---------
 p = [0.002370606, ... 
     0.02488078, 0.001255718, ...
     0.00092377 , 0.001142701 , 0.0006220911, 0.0006661198, ...
@@ -110,7 +110,7 @@ p = [0.002370606, ...
     0.0162731, 0.003164098 , 0.006141488 , 0.01709096, ...
     0.00712985];      
 
-% fraction ICs are less skewed
+% fraction ICs are less skewed ---
 y0 = [1, ...              % blood
     0, ...                % bm
     0, 0, ...             % spleen
@@ -143,7 +143,7 @@ ylabel('Total unlabeled')
 xlabel('Time')
 
 
-% --- labeled will approach completion as t -> inf -----------------------
+% --- labeled will approach completion as t -> inf ---
 N_BM  = y(:,2);
 N_SRP = y(:,3);
 N_SWP = y(:,4);
