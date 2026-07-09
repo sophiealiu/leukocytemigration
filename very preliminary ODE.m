@@ -63,7 +63,7 @@ dydt = [-(k1+k2+ k3a+k3b+k3c+k3d+ k4)*b + kneg1*(l1+u1) + kneg2*(l2+u2) + ...
         k3a*b - kneg3a*l3a;
         k3b*b - kneg3b*l3b;
         k3c*b - kneg3c*l3c;
-        k3d*b - kneg3d*l3d + k4*l4;
+        k3d*b - kneg3d*l3d + kneg4*l4;
 
         k4*b - kneg4*l4;
 
