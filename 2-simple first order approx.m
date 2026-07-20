@@ -1,7 +1,7 @@
 % ------------------------------------------------------------------------
 % Author: Sophie A. Liu
-% Purpose: simple compartment modeling
-% a bit irritating to hard code things
+% Purpose: preliminary compartment modeling
+% a bit irritating to hard code parameters
 % ------------------------------------------------------------------------
 
 % --- assumptions -------
