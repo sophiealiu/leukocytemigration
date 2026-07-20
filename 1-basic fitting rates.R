@@ -1,7 +1,6 @@
 # -----------------------------------------------------------------------------
 # Author: Sophie A. Liu
-# Date : 07/08/2026 3:47pm CDT
-# Purpose: Estimating forward and reverse rates
+# Purpose: simple estimation of CD4 forward and reverse rates (format excel for other conditions)
 # -----------------------------------------------------------------------------
 
 library(broom)
@@ -13,20 +12,21 @@ library(readxl)
 library(tidyverse)
 
 
-leukdatadir <- "path/to/your/working/directory"
-dfmig <- read_excel(file.path(leukdatadir, "estim_0708.xlsx"), sheet = "summary")
+leukdatadir <- "I:/Hu Lab/Sophie/2. Leukocyte migration/data"
+dfmig <- read_excel(file.path(leukdatadir, "estim_0720.xlsx"), sheet = "summary")
 
 
 # -----------------------------------------------------------------------------
-# u(t) = u0exp[-krev*t], reverse direction rate constant
+# simple assumption u(t) = u0exp[-krev*t], reverse direction rate constant
+# once labeled it cannot lose its label
 # making it into format R nls understands
 df_long <- dfmig %>%
   pivot_longer(
-    cols = c(`0`, `10`, `20`, `30`, `40`),
+    cols = starts_with("t"),
     names_to = "time",
     values_to = "percent"
   ) %>%
-  mutate(time = as.numeric(time))
+  mutate(time = as.numeric(sub("^t", "", time)))
 
 tissues <- unique(df_long$sample_type)
 tissues <- tissues[tissues != "blood"]
@@ -116,29 +116,14 @@ for (i in seq_along(tissues)) {
 
 # -----------------------------------------------------------------------------
 # kfor = krev(counts tissue/counts blood) due to conservation of volume
-blood_counts <- dfmig %>%
-  filter(sample_type == "blood") %>%
-  pull(cell_count)
-
-dfmig2 <- dfmig %>%
-  filter(sample_type != "blood") %>%
-  group_by(sample_type) %>%
-  mutate(
-    mouse = row_number(),
-    blood_count = blood_counts[mouse],
-    ratio = cell_count / blood_count
-  ) %>%
-  ungroup()
-
 k_fors <- vector("list", length(tissues))
 names(k_fors) <- tissues
 
 for (i in seq_along(tissues)) {
   tissue <- tissues[i]
-  
-  ratio <- dfmig2 %>%
+  ratio <- dfmig %>%
     filter(sample_type == tissue) %>%
-    summarise(mean_ratio = mean(ratio)) %>%
+    summarise(mean_ratio = mean(cell_count / blood, na.rm = TRUE)) %>%
     pull(mean_ratio)
   
   calc <- k_revs[[i]] * ratio
@@ -161,7 +146,7 @@ order <- c(
 
 df_plot <- data.frame(
   tissue = names(k_fors),
-  k_value = unlist(k_fors),
+  k_value = unlist(k_fors),                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
   row.names = NULL
 )
 
@@ -172,3 +157,4 @@ ggplot(df_plot, aes(x = k_value, y = tissue)) +
   labs(title = "rate constants of entry for different tissues",
        x = "forward rate",
        y = "tissue")
+
