@@ -1,7 +1,7 @@
 % ------------------------------------------------------------------------
 % Author: Sophie A. Liu
-% Date : 07/09/2026 1:04pm CDT
 % Purpose: simple compartment modeling
+% a bit irritating to hard code things
 % ------------------------------------------------------------------------
 
 % --- assumptions -------
