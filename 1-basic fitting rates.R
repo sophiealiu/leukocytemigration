@@ -1,6 +1,6 @@
 # -----------------------------------------------------------------------------
 # Author: Sophie A. Liu
-# Purpose: simple estimation of CD4 forward and reverse rates (format excel for other conditions)
+# Purpose: simple estimation of CD4 PBS forward and reverse rates (format excel for other conditions)
 # -----------------------------------------------------------------------------
 
 library(broom)
