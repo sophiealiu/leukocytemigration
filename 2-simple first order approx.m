@@ -4,12 +4,6 @@
 % a bit irritating to hard code parameters
 % ------------------------------------------------------------------------
 
-% ------------------------------------------------------------------------
-% Author: Sophie A. Liu
-% Date : 07/09/2026 1:04pm CDT
-% Purpose: simple compartment modeling
-% ------------------------------------------------------------------------
-
 % --- assumptions -------
 % conservation of volume in each compartment
 % homeostasis will be reached
