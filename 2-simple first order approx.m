@@ -4,6 +4,12 @@
 % a bit irritating to hard code parameters
 % ------------------------------------------------------------------------
 
+% ------------------------------------------------------------------------
+% Author: Sophie A. Liu
+% Date : 07/09/2026 1:04pm CDT
+% Purpose: simple compartment modeling
+% ------------------------------------------------------------------------
+
 % --- assumptions -------
 % conservation of volume in each compartment
 % homeostasis will be reached
@@ -14,7 +20,7 @@
 function dydt = splitComps(t,y,p)
     b = y(1);
 
-% -- continues down similarly, many vars ----
+% --- continues down similarly, many vars ----
     l1 = y(2);        % bone marrow
     l2a = y(3);       % both red and white pulp spleen
     l2b = y(4);
@@ -26,7 +32,7 @@ function dydt = splitComps(t,y,p)
 
     l4 = y(9);       % peyer's patches
 
-% ---
+% -----------------
     u1 = y(10);    
     u2a = y(11);
     u2b = y(12);
@@ -100,15 +106,18 @@ end
 
 % --- initial guess for params based on R. magnitude not direction 
 % krevs first then kfors ---------
-p = [0.002370606, ... 
+% first bone marrow, red pulp, white pulp, axillary, iliac, inguinal,
+% mesenteric, peyer's patches
+p = [0.002370606 , ... 
     0.02488078, 0.001255718, ...
-    0.00092377 , 0.001142701 , 0.0006220911, 0.0006661198, ...
-    0.001302991, ...
+    0.0009416563  ,0.001221415  , 0.0008115359 , ...
+    0.000860843 , ...
+    0.001053737, ...
 
-    0.001349783, ...
-    0.03721345, 0.01029477 , ...
-    0.0162731, 0.003164098 , 0.006141488 , 0.01709096, ...
-    0.00712985];      
+    0.003289281, ...
+    0.01185686 , 0.02052329  , ...
+    0.02520642, 0.005542072 , 0.01259731 , 0.03447049 , ...
+    0.008135678 ];      
 
 % fraction ICs are less skewed ---
 y0 = [1, ...              % blood
@@ -121,26 +130,26 @@ y0 = [1, ...              % blood
     1, 1,1,1, ...
     1];      
 
-% --- they can only take the experiment out to 3 days (72 hrs, 4320 min.)
-tspan = [0, 4000];    % rates etc. in 1/min unit
+% --- they can only take the experiment out to 3 days (72 hrs, 4320 sec.)
+tspan = [0, 600];    % rates etc. in 1/min unit
 
 % --- solving
 [t, y] = ode45(@(t, y)splitComps(t, y, p), tspan, y0);
-plot(t,y)
-legend('blood', ...
-    'labeled bone marrow','labeled spleen', ...
-    'labeled lymph axillary', 'L LN iliac', 'L LN inguinal', 'L LN mesenteric',...
-    'labeled peyer', ...
-    'UL BM','UL spleen', ...
-    'UL LN axillary', 'UL LN iliac', 'UL LN inguinal', 'UL LN mesenteric',...
-    'UL PPs')
-
-UL = sum(y(:,10:17),2);
-
-figure
-plot(t,UL,'LineWidth',2)
-ylabel('Total unlabeled')
-xlabel('Time')
+% plot(t,y)
+% legend('blood', ...
+%     'labeled bone marrow','labeled spleen', ...
+%     'labeled lymph axillary', 'L LN iliac', 'L LN inguinal', 'L LN mesenteric',...
+%     'labeled peyer', ...
+%     'UL BM','UL spleen', ...
+%     'UL LN axillary', 'UL LN iliac', 'UL LN inguinal', 'UL LN mesenteric',...
+%     'UL PPs')
+% 
+% UL = sum(y(:,10:17),2);
+% 
+% figure
+% plot(t,UL,'LineWidth',2)
+% ylabel('Total unlabeled')
+% xlabel('Time')
 
 
 % --- labeled will approach completion as t -> inf ---
