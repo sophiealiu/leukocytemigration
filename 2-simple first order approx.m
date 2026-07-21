@@ -7,8 +7,8 @@
 % --- assumptions -------
 % conservation of volume in each compartment
 % homeostasis will be reached
-% once labeled, it cannot be unlabeled 
-% (however, label only lasts 5 min and we have 10 min increments...
+% once labeled, it cannot be unlabeled (however, label only lasts 5 min)
+% total "amount" is 9, 1 for each compartment and blood. based on fractions for now so missing scale
 % ------------------------
 
 function dydt = splitComps(t,y,p)
