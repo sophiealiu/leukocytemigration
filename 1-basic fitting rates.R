@@ -124,8 +124,7 @@ for (i in seq_along(tissues)) {
   tissue <- tissues[i]
   ratio <- dfmig %>%
     filter(sample_type == tissue) %>%
-    summarise(mean_ratio = mean(cell_count / blood, na.rm = TRUE)) %>%
-    pull(mean_ratio)
+    summarise(mean_ratio = mean(cell_count / blood, na.rm = TRUE))      # each time is difficult to account for
   
   calc <- k_revs[[i]] * ratio
   k_fors[[i]] <- calc
