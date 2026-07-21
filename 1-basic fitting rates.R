@@ -40,7 +40,7 @@ names(k_revs) <- tissues
 for (i in seq_along(tissues)) {
   tissue <- tissues[i]
   model <- nls(
-    percent ~ exp(-k * time),
+    percent ~ exp(-k * time),         # treating as fractions u(0) = 1
     data = df_long %>% 
       filter(sample_type == tissue),
     start = list(k = 0.001))          # required to have initial guess. starting small based on inspection
