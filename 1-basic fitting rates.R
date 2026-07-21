@@ -1,6 +1,7 @@
 # -----------------------------------------------------------------------------
 # Author: Sophie A. Liu
-# Purpose: simple estimation of CD4 PBS forward and reverse rates (re-format excel for other conditions)
+# Purpose: simple estimation of CD4 PBS forward and reverse rates
+#        - these will be manually put into MATLAB file (a bit inelegant).
 # -----------------------------------------------------------------------------
 
 library(broom)
@@ -45,6 +46,7 @@ for (i in seq_along(tissues)) {
     start = list(k = 0.001))          # required to have initial guess. starting small based on inspection
   k_revs[[i]] <- coef(model)["k"]
 }
+print(k_revs)
 
 
 # -----------------------------------------------------------------------------
@@ -129,6 +131,7 @@ for (i in seq_along(tissues)) {
   calc <- k_revs[[i]] * ratio
   k_fors[[i]] <- calc
 }
+print(k_fors)
 
 
 # -----------------------------------------------------------------------------
