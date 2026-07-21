@@ -31,7 +31,7 @@ df_long <- dfmig %>%
   mutate(time = as.numeric(sub("^t", "", time)))
 
 tissues <- unique(df_long$sample_type)
-tissues <- tissues[tissues != "blood"]
+# tissues <- tissues[tissues != "blood"]              # not necessary with current formatting
 
 # fitting nonlinear least sq, pct labeled response
 k_revs <- vector("list", length(tissues))
