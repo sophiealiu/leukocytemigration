@@ -111,12 +111,12 @@ p = [0.002370606 , ...                   % bm reverse
 
 % fraction ICs are less skewed ---
 y0 = [1, ...              % blood
-    0, ...                % bm
-    0, 0, ...             % spleen
-    0, 0, 0, 0, ...       % LNs
-    0, ...                % PPs
-    0, ...
-    1, 1, ... 
+    0, ...                % labeled bm
+    0, 0, ...             % L spleen red & white
+    0, 0, 0, 0, ...       % L LNs
+    0, ...                % L PPs
+    1, ...                % unlabeled bm 
+    1, 1, ...             % etc.
     1, 1,1,1, ...
     1];      
 
