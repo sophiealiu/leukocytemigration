@@ -99,19 +99,15 @@ dydt = [
 end
 
 % --- initial guess for params based on R. magnitude not direction 
-% krevs first then kfors ---------
-% first bone marrow, red pulp, white pulp, axillary, iliac, inguinal,
-% mesenteric, peyer's patches
-p = [0.002370606 , ... 
-    0.02488078, 0.001255718, ...
-    0.0009416563  ,0.001221415  , 0.0008115359 , ...
-    0.000860843 , ...
-    0.001053737, ...
+p = [0.002370606 , ...                   % bm reverse
+    0.02488078, 0.001255718, ...         % spleen red, white
+    0.0009416563  ,0.001221415  , 0.0008115359 , ...          % LNs: ax, il, ing, mes
+    0.000860843 , ...                    % peyer's
 
-    0.003289281, ...
-    0.01185686 , 0.02052329  , ...
-    0.02520642, 0.005542072 , 0.01259731 , 0.03447049 , ...
-    0.008135678 ];      
+    0.003289281, ...                     % bm forward
+    0.01185686 , 0.02052329  , ...       % spleen red, white
+    0.02520642, 0.005542072 , 0.01259731 , 0.03447049 , ...   % LNs: ax, il, ing, mes
+    0.008135678 ];                       % peyer's
 
 % fraction ICs are less skewed ---
 y0 = [1, ...              % blood
