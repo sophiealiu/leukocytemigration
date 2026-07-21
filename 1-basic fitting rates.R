@@ -12,6 +12,7 @@ library(readxl)
 library(tidyverse)
 
 
+# explicit path, set to working directory
 leukdatadir <- "I:/Hu Lab/Sophie/2. Leukocyte migration/data"
 dfmig <- read_excel(file.path(leukdatadir, "estim_0720.xlsx"), sheet = "summary")
 
